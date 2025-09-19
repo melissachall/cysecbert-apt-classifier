@@ -1,0 +1,48 @@
+services:
+  apt-classifier:
+    build: 
+      context: ..
+      dockerfile: Dockerfile
+      target: production
+    container_name: apt-classifier-main
+    ports:
+      - "8000:8000"
+    environment:
+      - MODEL_PATH=/app/best_cysecbert_max_performance.pt
+      - PYTHONPATH=/app
+    volumes:
+      - ../logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 60s
+      timeout: 30s
+      retries: 5
+      start_period: 120s
+    networks:
+      - apt-network
+
+  apt-interface:
+    build: 
+      context: ..
+      dockerfile: Dockerfile
+      target: production
+    container_name: apt-classifier-ui
+    ports:
+      - "8501:8501"
+    environment:
+      - MODEL_PATH=/app/best_cysecbert_max_performance.pt
+      - PYTHONPATH=/app
+    volumes:
+      - ../logs:/app/logs
+    command: ["streamlit", "run", "apt_classification_interface.py", "--server.address", "0.0.0.0", "--server.port", "8501"]
+    restart: unless-stopped
+    depends_on:
+      apt-classifier:
+        condition: service_healthy
+    networks:
+      - apt-network
+
+networks:
+  apt-network:
+    driver: bridge

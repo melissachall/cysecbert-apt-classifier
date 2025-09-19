@@ -1,0 +1,17 @@
+streamlit
+torch
+transformers
+pandas
+numpy
+plotly
+seaborn
+matplotlib
+scikit-learn
+PyPDF2
+python-docx
+
+
+tqdm
+fastapi
+uvicorn
+python-multipart
