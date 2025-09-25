@@ -48,8 +48,3 @@ Placez le fichier téléchargé à la racine du projet avant de lancer les scrip
    cd deployment
    docker-compose up
    ```
-
-## Contact
-
-melissachall  
-[https://github.com/melissachall](https://github.com/melissachall)
